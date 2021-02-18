@@ -1,0 +1,31 @@
+{"val_intents": [
+	{"tag": "greeting",
+	 "patterns": ["hey there"]
+	},
+	{"tag": "flightbooking",
+	"patterns": ["i would really like if it is possible to book a flight", "it is possible to buy a ticket for a flight to Berlin for tomorrow"]
+	},
+	{"tag": "flightinfo",
+	"patterns": ["can you please tell me what is the status of my flight ab1234", "do you know by chance which is the status of my flight"]
+	},
+	{"tag": "flightgate",
+	"patterns": ["can you please tell me what is the gate of my flight ab1234", "do you know by chance which is the gate of my flight"]
+	},
+	{"tag": "flightcheckin",
+	"patterns": ["can you please tell me where can I check in for my flight ab1234", "do you know by chance which is the terminal for checking in for my flight"]
+	},
+	{"tag": "disablepeople",
+	"patterns": ["is there any kind of assistance for people with disabilites in this airport", "what about disable people"]
+	},
+	{"tag": "shoppresence",
+	"patterns": ["is it possible to find a supermarket", "can I find here a toy store", "is there any Gucci store in the airport"]
+	},
+    {"tag": "wheretobuy",
+	"patterns": ["it is possible to find here a shop that sells pillows", "do you know if I can buy a radio somewhere in the airport"]
+	},
+	{"tag": "flightinfo",
+	"patterns": ["can you please tell me what is the status of my flight ab1234", "do you know by chance which is the status of my flight"]
+	}
+]
+}	
+	
