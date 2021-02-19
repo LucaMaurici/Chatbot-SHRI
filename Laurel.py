@@ -146,6 +146,66 @@ class Laurel():
         choice = random.randint(0,len(answers)-1)
         self.speak(answers[choice])
         return False
+
+    def evaluation(self, sentence):
+        answers = ["Ok, I need more details about the evaluation to assist you. Please tell me the kind of property you want to be evalueted.",
+                    "I need more details. Please tell me the kind of property you want to be evalueted.",
+                    "Is it an apartment, a garage, a villa or a land?"]
+        choice = random.randint(0,len(answers)-1)
+        self.speak(answers[choice])
+        guess = None
+        while guess is None:
+            guess = self.hear()
+            guess = guess["transcription"]
+            #try:
+            #print(self.parser.words(guess))
+            words = self.parser.words(guess)
+            candidates = ['apartment', 'garage', 'villa', 'land', 'box', 'flat', 'palace', 'hotel', 'terrain', 'basement', 'attic'\
+                            'apartments', 'garages', 'villas', 'lands', 'boxes', 'flats', 'palaces', 'hotels', 'terrains', 'basements', 'attics']
+            commonWords = self.parser.commonWords(candidates, words)
+            if len(commonWords)>=2:
+                self.speak("Please, specify one type only")
+                guess = None
+                continue
+            elif self.parser.shareWords(commonWords, ['apartment', 'basement', 'attic']):
+                return self.apartmentEvaluation(sentence)
+            else:
+                guess = None
+            #except: 
+                #guess = None
+        return True
+
+    def apartmentEvaluation(self, sentence):
+        answers = ["Ok, how many square meters?",
+                    "Ok, how much is big?"]
+        choice = random.randint(0,len(answers)-1)
+        self.speak(answers[choice])
+        guess = None
+        while guess is None:
+            guess = self.hear()
+            guess = guess["transcription"]
+            try:
+                ent = self.parser.entities(guess)
+                '''
+                words = self.pareser.getWords(guess)
+                candidates = ['apartment', 'garage', 'villa', 'land', 'box', 'flat', 'palace', 'hotel', 'terrain', 'basement', 'attic']
+                commonWords = parser.commonWords(candidates, words)
+                if len(commonWords)>=2:
+                    self.speak("Please, specify one type only")
+                    guess = None
+                    continue
+                elif:
+                    shareWords(commonWords, ['apartment', 'basement', 'attic']):
+                    return apartmentEvaluation(sentence)
+                elif:
+                    guess = None
+                '''
+                print(ent['CARDINAL'][0])
+                self.speak(ent['CARDINAL'][0])
+            except: 
+                guess = None
+        return True
+
     
     def shoppresence(self, sentence):
         complobj = None

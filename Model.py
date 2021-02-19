@@ -57,7 +57,7 @@ def loadmodel():
         tokenizer = pickle.load(handle)
 
     # load label encoder object
-    with open('label_encoder.pickle', 'rb') as enc:
+    with open('labelEncoder.pkl', 'rb') as enc:
         lbl_encoder = pickle.load(enc)
         
     return model, tokenizer, lbl_encoder
@@ -76,9 +76,9 @@ def createmodel(training_labels, training_sentences):
     #creating the model
     model = Sequential()
     model.add(Embedding(vocab_size, embedding_dim, input_length=max_len))
-    model.add(Conv1D(32, 5, activation='relu'))
+    model.add(Conv1D(32, (3), activation='relu'))
     model.add(GlobalMaxPooling1D())
-    model.add(Dense(16, activation='relu'))
+    model.add(Dense(64, activation='relu'))
     #model.add(Dense(16, activation='relu'))
     model.add(Dense(num_classes, activation='softmax'))
     model.compile(loss='sparse_categorical_crossentropy', 
@@ -106,7 +106,7 @@ def tokenization(tokenizer, training_sentences, val_sentences):
 
 def training(model, padded_sequences, val_padded_sequences, training_labels, val_labels):
     #training
-    early_stop = callbacks.EarlyStopping(monitor='val_loss',patience=100, restore_best_weights = True)
+    early_stop = callbacks.EarlyStopping(monitor='loss',patience=100, restore_best_weights = True)
     epochs = 500
     history = model.fit(padded_sequences, np.array(training_labels), epochs=epochs, validation_data = (val_padded_sequences, np.array(val_labels)), callbacks = [early_stop])
     model.save("model")
@@ -114,7 +114,7 @@ def training(model, padded_sequences, val_padded_sequences, training_labels, val
         pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
         
     # to save the fitted label encoder
-    with open('label_encoder.pickle', 'wb') as ecn_file:
+    with open('labelEncoder.pkl', 'wb') as ecn_file:
         pickle.dump(lbl_encoder, ecn_file, protocol=pickle.HIGHEST_PROTOCOL)
     
 def evaluate(model, val_padded_sequences, val_labels): 
@@ -123,7 +123,7 @@ def evaluate(model, val_padded_sequences, val_labels):
     print('Test accuracy: %f' %acc)
 
 if __name__ == '__main__':
-    train = False
+    train = True
     training_sentences, training_labels, labels, val_sentences, val_labels, num_classes = loaddata()
     if not train:
         model, tokenizer, lbl_encoder = loadmodel()

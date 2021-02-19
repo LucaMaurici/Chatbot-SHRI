@@ -6,11 +6,28 @@ class Parser():
         self.nlp = spacy.load("en_core_web_sm")
     
     def noun_chunks(self, sentence):
-        dict = {}
+        chunck_dict = {}
         sentence = self.nlp(sentence)
         for chunk in sentence.noun_chunks:
-            dict[chunk.root.dep_] = chunk.text 
-        return dict
+            print(chunk)
+            if chunk.root.dep_ not in chunck_dict.keys():
+                chunck_dict[chunk.root.dep_] = list()
+            chunck_dict[chunk.root.dep_].append(chunk.text)
+        return chunck_dict
+
+    def noun_chunksTexts(self, sentence):
+        sentence = self.nlp(sentence)
+        chunck_list = list()
+        for chunk in sentence.noun_chunks:
+            chunck_list.append(chunk.text)
+        return chunck_list
+
+    def noun_chunksDependences(self, sentence):
+        sentence = self.nlp(sentence)
+        chunck_list = list()
+        for chunk in sentence.noun_chunks:
+            chunck_list.append(chunk.text)
+        return chunck_list
         
     def entities(self, sentence):
         sentence = self.nlp(sentence)
@@ -36,7 +53,7 @@ class Parser():
         return words
         
     def parse(self, sentence):
-        dict = {}
+        analysis = {}
         parents2children = {}
         labels = {}
         sentence = self.nlp(sentence)
@@ -45,15 +62,36 @@ class Parser():
                     [child for child in token.children])
             print('\n')
             parents2children[str(token)] = [child for child in token.children]
-            dict[token.dep_] = token.text
+            analysis[token.dep_] = token.text
             
-        return dict, parents2children
+        return analysis, parents2children
+
+    def shareWords(self, sentence1, sentence2):
+        list1 = sentence1
+        list2 = sentence2
+        for e1 in list1:
+            if e1 in list2:
+                return True
+        return False
+
+    def commonWords(self, sentence1, sentence2):
+        list1 = sentence1
+        list2 = sentence2
+        commonWords = list()
+        for e1 in list1:
+            if e1 in list2:
+                commonWords.append(e1)
+        return set(commonWords)
+
         
     
 if __name__ == '__main__':
+    print("Write: ")
     sentence = input()
     p = Parser()
     p.parse(sentence)
+    #print(p.parse(sentence))
     print(p.entities(sentence))
+    #print(p.noun_chunks(sentence))
     
     

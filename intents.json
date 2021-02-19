@@ -14,32 +14,25 @@
     {"tag": "complaint",
     "patterns": ["have a complaint", "I want to raise a complaint", "there is a complaint about a service", "complaint", "i have a complaint"]
     },
-	{"tag": "shoppresence",
-	"patterns": ["Can I find a supermarket in the airport", "can I find some electronic shops here", "can I find an Armani store in the airport", "is there a GameStop here", "is there an hairdresser in the airport", "is there a cafe", "Are there any restaurants", "are there any videogames stores here", "are there any clothes shops in the airport"]
+
+    {"tag": "evaluation",
+	"patterns": ["i need an evaluation", "i would need an evaluation", "i need a real estate valuation", "i would like to evaluate my property",
+	 "is there someone who can evaluate a property", "could you make a real estate estiamte", "i would like to sell my property", 
+	 "i would like to know a good price for a property","i would like to know a good price for my estate", "i want to evaluate my propery", 
+	 "can you estimate the price of my estate", "can you evaluate my estate", "i would like to know a good price for my house", 
+	 "can you evaluate my house", "i would like to evaluate my house"]
 	},
-	{"tag": "flightbooking",
-	"patterns": ["I would like to book a flight from London to Rome for tomorrow", "I want to buy a ticket for a flight from Milan to Helsinki for Sunday", "I would like to buy a ticket for a flight", "Can you please book me a flight from Prague to Berlin for March 24", "I would like to book a flight from Dublin to Madrid", "I want to book a flight"]
+	{"tag": "apartmentEvaluation",
+	"patterns": ["is there someone who can evaluate a property", "could you make a real estate estiamte for my apartment", "i would like to sell my house", 
+	 "i would like to know a good price for my apartment", "i would like to evaluate my attic", 
+	 "i would like to evaluate my basement", "can you evaluate my villa"]
 	},
-	{"tag": "flightinfo",
-	"patterns": ["I would like to know what is the status of my flight", "what is the status of my flight BA2490", "Can you give me some information about my flight TO3145", "do you have any information about my flight"]
+	{"tag": "garageEvaluation",
+	"patterns": ["i would like to know a good price for my garage"]
 	},
-	{"tag": "flightgate",
-	"patterns": ["I would like to know which is the gate of my flight RY3168", "Do you know what is the gate of my flight", "Can I ask you what is the gate of my flight", "Gate of flight AI2874?"]
-	},
-	{"tag": "flightcheckin",
-	"patterns": ["Do you know what is the terminal of my flight RY3168", "What is the terminal of my flight", "Where can I check in for my flight TO3145"]
-	},
+
 	{"tag" : "disablepeople",
 	"patterns": ["what kind of services are available for disable people", "Do you offer any kind of assistance for disable people", "which kind of assistance do you offer for people with disabilities"]
-	},
-	{"tag": "wheretobuy",
-	"patterns": ["Is there any shop in which I can buy a souvenir", "where can I buy some clothes", "where can I buy a pizza","where can I buy a guitar", "where can I buy a couple of magnets",  "where can I find a magnet for my daugther", "are there any shops which sell perfumes?", "is there a shop that sells souvenirs", "shops selling clothes", "stores selling postcards"]
-	},
-	{"tag": "rentacar",
-	"patterns": ["i would like to rent a car", "i want to rent a car", "can i rent a car", "is it possible to rent a car"]
-	},
-	{"tag": "bookhotel",
-	"patterns": ["do you know if there is an hotel next to the airport", "can you suggest me an hotel near the airport", "is there any hotel not too much far from here"]
 	}
 ]
 }
