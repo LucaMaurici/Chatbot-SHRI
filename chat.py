@@ -2,7 +2,7 @@ import json
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
 from tensorflow import keras
-from Bea import Bea
+from Laurel import Laurel
 import random
 import pickle
 import speech_recognition as sr
@@ -12,14 +12,14 @@ class notsure(Exception):
 
 def chat():
     # load trained model
-    model = keras.models.load_model('chat_model')
+    model = keras.models.load_model('model')
 
     # load tokenizer object
     with open('tokenizer.pickle', 'rb') as handle:
         tokenizer = pickle.load(handle)
 
     # load label encoder object
-    with open('label_encoder.pickle', 'rb') as enc:
+    with open('labelEncoder.pkl', 'rb') as enc:
         lbl_encoder = pickle.load(enc)
 
     # parameters
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     PROMPT_LIMIT = 5
     recognizer = sr.Recognizer()
     microphone = sr.Microphone()
-    assistent = Bea(recognizer, microphone, PROMPT_LIMIT)
+    assistent = Laurel(recognizer, microphone, PROMPT_LIMIT)
     chat()
     
     

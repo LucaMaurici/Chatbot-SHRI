@@ -5,7 +5,7 @@ import string
 from gtts import gTTS 
 import speech_recognition as sr
 import spacy
-from SpeechParser import Parser
+from Parser import Parser
 import numpy as np
 
 #["Please provide us your complaint in order to assist you", "Please mention your complaint, we will reach you and sorry for any inconvenience caused"]
@@ -43,7 +43,7 @@ import numpy as np
 
 #sistemare la conferma della prenotazione volo
 
-class Bea():
+class Laurel():
 
     def __init__(self, recognizer, microphone, limit):
         self.shop_types = ["souvenir stores", "supermarket duty free", "luxury shops", "restaurants", "cafes"]
@@ -117,8 +117,8 @@ class Bea():
     def speak(self, sentence):
         language = 'en'
         myobj = gTTS(text=sentence, lang=language, slow=False) 
-        myobj.save("welcome.mp3") 
-        os.system("mpg321.exe welcome.mp3")
+        myobj.save("audio.mp3") 
+        os.system("mpg321.exe audio.mp3")
     
     def greeting(self, sentence):
         print("Hi, how can I help you?")

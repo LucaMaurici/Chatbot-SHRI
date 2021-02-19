@@ -10,7 +10,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from sklearn.preprocessing import LabelEncoder
 import pickle
 
-vocab_size = 2000
+vocab_size = 500
 embedding_dim = 16
 max_len = 20
 oov_token = "<OOV>"
@@ -50,7 +50,7 @@ def loaddata():
 
 def loadmodel():
     # load trained model
-    model = keras.models.load_model('chat_model')
+    model = keras.models.load_model('model')
 
     # load tokenizer object
     with open('tokenizer.pickle', 'rb') as handle:
@@ -109,7 +109,7 @@ def training(model, padded_sequences, val_padded_sequences, training_labels, val
     early_stop = callbacks.EarlyStopping(monitor='val_loss',patience=100, restore_best_weights = True)
     epochs = 500
     history = model.fit(padded_sequences, np.array(training_labels), epochs=epochs, validation_data = (val_padded_sequences, np.array(val_labels)), callbacks = [early_stop])
-    model.save("chat_model")
+    model.save("model")
     with open('tokenizer.pickle', 'wb') as handle:
         pickle.dump(tokenizer, handle, protocol=pickle.HIGHEST_PROTOCOL)
         
