@@ -176,6 +176,7 @@ class Laurel():
         return True
 
     def apartmentEvaluation(self, sentence):
+        #Question 1
         answers = ["Ok, how many square meters?",
                     "Ok, how much is big?"]
         choice = random.randint(0,len(answers)-1)
@@ -184,27 +185,113 @@ class Laurel():
         while guess is None:
             guess = self.hear()
             guess = guess["transcription"]
-            try:
-                ent = self.parser.entities(guess)
-                '''
-                words = self.pareser.getWords(guess)
-                candidates = ['apartment', 'garage', 'villa', 'land', 'box', 'flat', 'palace', 'hotel', 'terrain', 'basement', 'attic']
-                commonWords = parser.commonWords(candidates, words)
-                if len(commonWords)>=2:
-                    self.speak("Please, specify one type only")
-                    guess = None
-                    continue
-                elif:
-                    shareWords(commonWords, ['apartment', 'basement', 'attic']):
-                    return apartmentEvaluation(sentence)
-                elif:
-                    guess = None
-                '''
-                print(ent['CARDINAL'][0])
-                self.speak(ent['CARDINAL'][0])
-            except: 
+            #try:
+            squareMeters = self.parser.extractNumber(guess)
+            if squareMeters == None:
+                print(squareMeters)
                 guess = None
+                continue
+            elif squareMeters < 5:
+                self.speak("Probably I didn't got it, it's too small! Can you repeat, please?")
+                guess = None
+                continue
+            
+            if squareMeters <= 20:
+                self.speak("It's a mini apartment!")
+            elif squareMeters <= 80:
+                self.speak("Ok, got it!")
+            elif squareMeters <= 130:
+                self.speak("It's a big house")
+            elif squareMeters > 130:
+                self.speak("It's huge")
+            else:
+                self.speak("Probably I didn't got it,  can you repeat, please?")
+                guess = None
+                continue
+
+            #Question 2
+            self.speak("Is it near the center?")
+            guess = None
+            while guess is None:
+                guess = self.hear()
+                guess = guess["transcription"]
+                try:
+                    words = self.parser.words(guess)
+                    candidates = ['yeah', 'yes', 'no', 'nope', 'middle', 'center', 'central', 'peripheral', 'suburbs', 'periphery', 'outskirts', 'semi-suburbs', 'semi-suburbs', 'type', 'almost', 'quite', 'near', 'between']
+                    groupCenter = ['yeah', 'yes', 'center', 'central', 'kind', 'almost', 'quite', 'near']
+                    groupSemiPeripheral = ['middle', 'semi-suburbs', 'semi-peripheral', 'semi-periphery']
+                    groupPeripheral = ['nope','no', 'peripheral', 'suburbs', 'periphery', 'outskirts']
+                    commonWordsCenterLen = len(self.parser.commonWords(groupCenter, words))
+                    commonWordsSemiPeripheralLen = len(self.parser.commonWords(groupSemiPeripheral, words))
+                    commonWordsPeripheralLen = len(self.parser.commonWords(groupPeripheral, words))
+                    if commonWordsCenterLen+commonWordsSemiPeripheralLen+commonWordsPeripheralLen>\
+                    max(commonWordsCenterLen, commonWordsSemiPeripheralLen, commonWordsPeripheralLen):
+                        self.speak("Please, give me a unique answer")
+                        guess = None
+                        continue
+                    elif commonWordsCenterLen>=1:
+                        self.speak("Nice, it's good for the evaluation")
+                        position = 'the center'
+                    elif commonWordsSemiPeripheralLen>=1:
+                        self.speak("Ok")
+                        position = 'semi-perifery'
+                    elif commonWordsPeripheralLen>=1:
+                        self.speak("That's not so good for the evaluation")
+                        position = 'periphery'
+                    else:
+                        guess = None
+                except: 
+                    guess = None
+            #except: 
+                #guess = None
+
+        sentenceToTell = "So, let's do a summary! Your apartment is in "+position+\
+                            ", it is "+str(squareMeters)+" square meters large, is it correct?"
+        self.speak(sentenceToTell)
+        guess = None
+        while guess is None:
+            guess = self.hear()["transcription"]
+            correctness = self.isCorrect(guess)
+            if correctness == None:
+                guess = None
+                continue
+            if correctness == True:
+                evaluation = squareMeters*3000
+                if position == 'center':
+                    evaluation * 2
+                elif position == 'periphery':
+                    evaluation * 0.6
+                sentenceToTell = "Very good, my personal evaluation for your apartment is around "+str(evaluation)+\
+                                " Euros, we could publish an announcement asking "+str(evaluation*1.15)+\
+                                " Euros that is 15 percent higher than his real value"
+                self.speak(sentenceToTell)
+            else:
+                self.speak("Please, give me a unique answer")
+                guess = None
+                continue
         return True
+
+    def isCorrect(self, sentence):
+        yes1 = ['yeah', 'yes', 'correct', 'positive', 'right', 'ok', 'okay']
+        no1 = ['no', 'nope', 'not' 'negative', 'wrong']
+        yes2 = ['it is']
+        no2 = ["it isn't", "not correct", "no correct", "not right", "ok", "okay"]
+        words = self.parser.words(sentence)
+        cwYes1 = len(self.parser.commonWords(yes1, words))
+        cwYes2 = len(self.parser.commonWords(yes2, words))
+        cwNo1 = len(self.parser.commonWords(no1, words))
+        cwNo2 = len(self.parser.commonWords(no2, words))
+        if cwNo2!=0:
+            return False
+        if cwNo1+cwYes1>max(cwNo1, cwYes1):
+            return None
+        if cwNo1!=0:
+            return False
+        if cwYes1!=0:
+            return True
+        if cwYes2!=0:
+            return True
+        return None
 
     
     def shoppresence(self, sentence):

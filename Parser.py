@@ -83,6 +83,14 @@ class Parser():
                 commonWords.append(e1)
         return set(commonWords)
 
+    def extractNumber(self, sentence):
+        squareMeters = None
+        for word in self.words(sentence):
+            if word.isnumeric():
+                squareMeters = int(word)
+                break
+        return squareMeters
+
         
     
 if __name__ == '__main__':
@@ -92,6 +100,12 @@ if __name__ == '__main__':
     p.parse(sentence)
     #print(p.parse(sentence))
     print(p.entities(sentence))
+    squareMeters = None
+    for word in p.words(sentence):
+        if word.isnumeric():
+            squareMeters = int(word)
+            break
+    print(squareMeters)
     #print(p.noun_chunks(sentence))
     
     
