@@ -4,14 +4,14 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import callbacks
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Embedding, Flatten, GlobalAveragePooling1D, GlobalMaxPooling1D, MaxPooling1D, Dropout, Conv1D
+from tensorflow.keras.layers import Dense, Embedding, Flatten, GlobalAveragePooling1D, GlobalMaxPooling1D, MaxPooling1D, Dropout, Conv1D, Input, concatenate
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from sklearn.preprocessing import LabelEncoder
 import pickle
 
-vocab_size = 500
-embedding_dim = 16
+vocab_size = 450
+embedding_dim = 18
 max_len = 20
 oov_token = "<OOV>"
 
@@ -73,6 +73,7 @@ def createmodel(training_labels, training_sentences):
     tokenizer = Tokenizer(num_words=vocab_size, oov_token=oov_token)
     tokenizer.fit_on_texts(training_sentences)
     
+    '''
     #creating the model
     model = Sequential()
     model.add(Embedding(vocab_size, embedding_dim, input_length=max_len))
@@ -83,6 +84,22 @@ def createmodel(training_labels, training_sentences):
     model.add(Dense(num_classes, activation='softmax'))
     model.compile(loss='sparse_categorical_crossentropy', 
                   optimizer='adam', metrics=['accuracy'])
+    '''
+
+    inp = Input((max_len))
+    x = Embedding(vocab_size, embedding_dim, input_length=max_len)(inp)
+    out1 = Conv1D(32, 1, activation='relu', padding = "same")(x)
+    out2 = Conv1D(28, 2, activation='relu', padding = "same")(x)
+    out3 = Conv1D(32, 3, activation='relu', padding = "same")(x)
+    out4 = Conv1D(16, 5, activation='relu', padding = "same")(x)
+    out5 = Conv1D(12, 8, activation='relu', padding = "same")(x)
+    out = concatenate([out1, out2, out3, out4, out5], axis = 2)
+    x = GlobalMaxPooling1D()(out)
+    x = Dense(40, activation='relu')(x)
+    x = Dense(num_classes, activation='softmax')(x)
+    model = tf.keras.Model(inputs = inp, outputs= x)
+    model.summary()
+    model.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
                   
     return model, tokenizer, lbl_encoder
 
@@ -107,7 +124,7 @@ def tokenization(tokenizer, training_sentences, val_sentences):
 def training(model, padded_sequences, val_padded_sequences, training_labels, val_labels):
     #training
     early_stop = callbacks.EarlyStopping(monitor='loss',patience=100, restore_best_weights = True)
-    epochs = 500
+    epochs = 400
     history = model.fit(padded_sequences, np.array(training_labels), epochs=epochs, validation_data = (val_padded_sequences, np.array(val_labels)), callbacks = [early_stop])
     model.save("model")
     with open('tokenizer.pickle', 'wb') as handle:

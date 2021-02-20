@@ -23,8 +23,8 @@
 	 "can you evaluate my house", "i would like to evaluate my house"]
 	},
 	{"tag": "apartmentEvaluation",
-	"patterns": ["is there someone who can evaluate a property", "could you make a real estate estiamte for my apartment", "i would like to sell my house", 
-	 "i would like to know a good price for my apartment", "i would like to evaluate my attic", 
+	"patterns": ["is there someone who can evaluate a property", "could you make a real estate estiamte for my apartment", "i would like to sell my apartment", 
+	 "i would like to know a good price for my apartment", "i would like to evaluate my attic", "i need an apartment evaluation",
 	 "i would like to evaluate my basement", "can you evaluate my villa"]
 	},
 	{"tag": "garageEvaluation",

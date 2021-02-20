@@ -2,8 +2,31 @@
 	{"tag": "greeting",
 	 "patterns": ["hey there"]
 	},
+	{"tag": "goodbye",
+     "patterns": ["good afternoon"]
+    },
+    {"tag": "thanks",
+     "patterns": ["you are kind"]
+    },
+    {"tag": "help",
+    "patterns": ["I don't know what to do"]
+    },
+    {"tag": "complaint",
+    "patterns": ["you lost my luggage"]
+    },
+
+    {"tag": "evaluation",
+	"patterns": ["i don't not how much the place where i live could value"]
+	},
+	{"tag": "apartmentEvaluation",
+	"patterns": ["i don't not how much the room where i live could value"]
+	},
+	{"tag": "garageEvaluation",
+	"patterns": ["i don't not how much the place where i park my auto could value"]
+	},
+
 	{"tag": "disablepeople",
-	"patterns": ["is there any kind of assistance for people with disabilites in this airport", "what about disable people"]
+	"patterns": ["i'm dsa"]
 	}
 ]
 }	
