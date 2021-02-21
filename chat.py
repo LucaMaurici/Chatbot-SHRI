@@ -50,7 +50,7 @@ def chat():
         #except:
             #assistent.speak("I didn't catch that. What did you say?")
 
-print("Start messaging with the bot (type quit to stop)!")
+#print("Start messaging with the bot (type quit to stop)!")
 
 if __name__ == '__main__':
     with open("intents.json") as file:

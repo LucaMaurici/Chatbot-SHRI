@@ -175,7 +175,8 @@ class Laurel():
                 #guess = None
         return True
 
-    def apartmentEvaluation(self, sentence):
+    def squareMetersApartment(self):
+        squareMeters = None
         #Question 1
         answers = ["Ok, how many square meters?",
                     "Ok, how much is big?"]
@@ -188,15 +189,13 @@ class Laurel():
             #try:
             squareMeters = self.parser.extractNumber(guess)
             if squareMeters == None:
-                print(squareMeters)
                 guess = None
                 continue
             elif squareMeters < 5:
-                self.speak("Probably I didn't got it, it's too small! Can you repeat, please?")
+                self.speak("Probably I didn't get it, it's too small! Can you repeat, please?")
                 guess = None
                 continue
-            
-            if squareMeters <= 20:
+            elif squareMeters <= 20:
                 self.speak("It's a mini apartment!")
             elif squareMeters <= 80:
                 self.speak("Ok, got it!")
@@ -205,77 +204,18 @@ class Laurel():
             elif squareMeters > 130:
                 self.speak("It's huge")
             else:
-                self.speak("Probably I didn't got it,  can you repeat, please?")
+                self.speak("Probably I didn't got it, can you repeat, please?")
                 guess = None
                 continue
-
-            #Question 2
-            self.speak("Is it near the center?")
-            guess = None
-            while guess is None:
-                guess = self.hear()
-                guess = guess["transcription"]
-                try:
-                    words = self.parser.words(guess)
-                    candidates = ['yeah', 'yes', 'no', 'nope', 'middle', 'center', 'central', 'peripheral', 'suburbs', 'periphery', 'outskirts', 'semi-suburbs', 'semi-suburbs', 'type', 'almost', 'quite', 'near', 'between']
-                    groupCenter = ['yeah', 'yes', 'center', 'central', 'kind', 'almost', 'quite', 'near']
-                    groupSemiPeripheral = ['middle', 'semi-suburbs', 'semi-peripheral', 'semi-periphery']
-                    groupPeripheral = ['nope','no', 'peripheral', 'suburbs', 'periphery', 'outskirts']
-                    commonWordsCenterLen = len(self.parser.commonWords(groupCenter, words))
-                    commonWordsSemiPeripheralLen = len(self.parser.commonWords(groupSemiPeripheral, words))
-                    commonWordsPeripheralLen = len(self.parser.commonWords(groupPeripheral, words))
-                    if commonWordsCenterLen+commonWordsSemiPeripheralLen+commonWordsPeripheralLen>\
-                    max(commonWordsCenterLen, commonWordsSemiPeripheralLen, commonWordsPeripheralLen):
-                        self.speak("Please, give me a unique answer")
-                        guess = None
-                        continue
-                    elif commonWordsCenterLen>=1:
-                        self.speak("Nice, it's good for the evaluation")
-                        position = 'the center'
-                    elif commonWordsSemiPeripheralLen>=1:
-                        self.speak("Ok")
-                        position = 'semi-perifery'
-                    elif commonWordsPeripheralLen>=1:
-                        self.speak("That's not so good for the evaluation")
-                        position = 'periphery'
-                    else:
-                        guess = None
-                except: 
-                    guess = None
             #except: 
                 #guess = None
-
-        sentenceToTell = "So, let's do a summary! Your apartment is in "+position+\
-                            ", it is "+str(squareMeters)+" square meters large, is it correct?"
-        self.speak(sentenceToTell)
-        guess = None
-        while guess is None:
-            guess = self.hear()["transcription"]
-            correctness = self.isCorrect(guess)
-            if correctness == None:
-                guess = None
-                continue
-            if correctness == True:
-                evaluation = squareMeters*3000
-                if position == 'center':
-                    evaluation * 2
-                elif position == 'periphery':
-                    evaluation * 0.6
-                sentenceToTell = "Very good, my personal evaluation for your apartment is around "+str(evaluation)+\
-                                " Euros, we could publish an announcement asking "+str(evaluation*1.15)+\
-                                " Euros that is 15 percent higher than his real value"
-                self.speak(sentenceToTell)
-            else:
-                self.speak("Please, give me a unique answer")
-                guess = None
-                continue
-        return True
+        return squareMeters
 
     def isCorrect(self, sentence):
         yes1 = ['yeah', 'yes', 'correct', 'positive', 'right', 'ok', 'okay']
-        no1 = ['no', 'nope', 'not' 'negative', 'wrong']
+        no1 = ['no', 'nope', 'not' 'negative', 'wrong', "neither"]
         yes2 = ['it is']
-        no2 = ["it isn't", "not correct", "no correct", "not right", "ok", "okay"]
+        no2 = ["it isn't", "not correct", "no correct", "not right", "not ok", "not okay"]
         words = self.parser.words(sentence)
         cwYes1 = len(self.parser.commonWords(yes1, words))
         cwYes2 = len(self.parser.commonWords(yes2, words))
@@ -292,6 +232,198 @@ class Laurel():
         if cwYes2!=0:
             return True
         return None
+
+    def apartmentEvaluation(self, sentence, wrong=None):
+
+        if wrong is None or wrong == 'squareMeters':
+            squareMeters = self.squareMetersApartment()
+
+        elif wrong is None or wrong == 'position':
+            #Question 2
+            self.speak("Is it near the center?")
+            guess = None
+            while guess is None:
+                guess = self.hear()
+                guess = guess["transcription"]
+                try:
+                    words = self.parser.words(guess)
+                    groupCenter = ['yeah', 'yes', 'center', 'central', 'kind', 'almost', 'quite', 'near']
+                    #groupSemiPeripheral = ['middle', 'semi-suburbs', 'semi-peripheral', 'semi-periphery']
+                    groupPeripheral = ['nope', 'no', 'peripheral', 'suburbs', 'periphery', 'outskirts', 'distant', 'far', 'away']
+                    commonWordsCenterLen = len(self.parser.commonWords(groupCenter, words))
+                    #commonWordsSemiPeripheralLen = len(self.parser.commonWords(groupSemiPeripheral, words))
+                    commonWordsPeripheralLen = len(self.parser.commonWords(groupPeripheral, words))
+                    if commonWordsCenterLen+commonWordsPeripheralLen>\
+                    max(commonWordsCenterLen, commonWordsPeripheralLen):
+                        self.speak("Please, give me a unique answer")
+                        guess = None
+                        continue
+                    elif commonWordsCenterLen>=1:
+                        self.speak("Nice, it's good for the evaluation")
+                        position = 'the center'
+                    #elif commonWordsSemiPeripheralLen>=1:
+                        #self.speak("Ok")
+                        #position = 'semi-perifery'
+                    elif commonWordsPeripheralLen>=1:
+                        self.speak("That's not so good for the evaluation")
+                        position = 'periphery'
+                    else:
+                        guess = None
+                        continue
+                except: 
+                    guess = None
+
+        if wrong is None:
+            self.speak("Let's continue!")
+
+        elif wrong is None or wrong == 'attic':
+            #Question 3
+            self.speak("Is it an attic or a basement?")
+            guess = None
+            while guess is None:
+                guess = self.hear()['transcription']
+
+                attic = ['attic', 'last']
+                basement = ['basement', 'minus', 'garage']
+                words = self.parser.words(sentence)
+                cwAttic = len(self.parser.commonWords(attic, words))
+                cwBasement = len(self.parser.commonWords(basement, words))
+
+                if cwAttic+cwBasement>max(cwAttic, cwBasement):
+                    self.speak("Please, give me a unique answer")
+                    guess = None
+                    continue
+                elif cwAttic!=0:
+                    floor = 'attic'
+                    self.speak("Oh very good!")
+                elif cwBasement!=0:
+                    floor = 'basement'
+                    self.speak("Mhh, ok.")
+                else:
+                    correct = self.isCorrect(guess)
+                    if correct:
+                        self.speak("Specify if it is an attic or a basement")
+                        guess = None
+                        continue
+                    elif not correct:
+                        floor = 'normal'
+                        self.speak("Got it.")
+                    else:
+                        guess = None
+                        continue
+
+        if wrong is None:
+            self.speak("Last question!")
+
+        elif wrong is None or wrong == 'nBathrooms':
+            #Question 4
+            self.speak("How many bathrooms are present?")
+            guess = None
+            while guess is None:
+                guess = self.hear()
+                guess = guess["transcription"]
+                #try:
+                nBathrooms = self.parser.extractNumber(guess)
+
+                if nBathrooms == None:
+                    guess = None
+                    continue
+                elif nBathrooms <=0:
+                    self.speak("Probably I didn't get it, it's impossible. Can you repeat, please?")
+                    guess = None
+                    continue
+                elif nBathrooms == 1:
+                    self.speak("Ok, it's standard.")
+                elif nBathrooms == 2:
+                    self.speak("Ok, good!")
+                elif nBathrooms == 3:
+                    self.speak("That's great, only few houses has 3 bathrooms!")
+                elif nBathrooms >= 4:
+                    self.speak("Wow, fantastic! You will be full of money!")
+                else:
+                    self.speak("Probably I didn't got it, can you repeat, please?")
+                    guess = None
+                    continue
+                #except: 
+                    #guess = None
+
+        sentenceToTell = "So, let's do a summary! Your apartment is in "+position
+
+        if floor == 'attic':
+            sentenceToTell += ", it's an attic"
+        if floor == 'basement':
+            sentenceToTell += ", it's a basement"
+
+        sentenceToTell += ", it is "+str(squareMeters)+" square meters large and it has "+str(nBathrooms)+\
+                            " bathrooms. Is it correct?"
+        self.speak(sentenceToTell)
+        guess = None
+        while guess is None:
+            guess = self.hear()["transcription"]
+            correctness = self.isCorrect(guess)
+            if correctness == None:
+                self.speak("Please, give me a unique answer")
+                guess = None
+                continue
+            elif correctness == True:
+                evaluation = squareMeters*3000
+
+                if position == 'center': evaluation *= 2
+                elif position == 'periphery': evaluation *= 1
+
+                if floor == 'attic': evaluation *= 1.3
+                elif floor == 'basement': evaluation *= 0.67
+                else: evaluation *= 1
+
+                evaluation += (nBathrooms-1)*30000
+
+                evaluation = round(evaluation)
+                sentenceToTell = "Very good, my personal evaluation for your apartment is around "+str(evaluation)+\
+                                " Euros, we could publish an announcement asking "+str(round(evaluation*1.15))+\
+                                " Euros that is 15 percent higher than his real value. If you want we can publish an announcement, do you agree?"
+                self.speak(sentenceToTell)
+                while guess is None:
+                    guess = self.hear()["transcription"]
+                    correctness = self.isCorrect(guess)
+                    if correctness == None:
+                        self.speak("Please, give me a unique answer")
+                        guess = None
+                        continue
+                    elif correctness == True:
+                        self.speak("Great! We will call you if we receive a bid.")
+                        self.speak("If I can do someting else for you, just ask me.")
+                    else:
+                        self.speak("Ok, no problem, when you want you can call us.")
+                        self.speak("If I can do someting else for you, just ask me.")
+            else:
+                self.speak("What is wrong?")
+                guess = None
+                while guess is None:
+                    guess = self.hear()["transcription"]
+                    squareMeters = ['square', 'meters', 'metres', 'meter', 'metre', 'dimensions', 'dimension',\
+                                    'size', 'big', 'small', 'squared', 'squares', 'area', 'surface', 'walkable']
+                    position = ['position', 'place', 'where', 'site', 'zone' 'location', 'center', 'central', 'peripheral',\
+                                 'suburbs', 'suburbs', 'periphery', 'outskirts', 'semi-suburbs', 'semi-suburbs']
+                    attic = ['attic', 'last', 'basement', 'minus', 'garage', 'floor']
+                    nBathrooms = ['bathrooms', 'restroom', 'bath', 'bathroom', 'restrooms', 'room', 'rooms']
+                    words = self.parser.words(sentence)
+                    cwAttic = len(self.parser.commonWords(attic, words))
+                    cwBasement = len(self.parser.commonWords(basement, words))
+
+                    if cwAttic+cwBasement>max(cwAttic, cwBasement):
+                        self.speak("Please, give me a unique answer")
+                        guess = None
+                        continue
+                    elif cwAttic!=0:
+                        floor = 'attic'
+                        self.speak("Oh very good!")
+                    elif cwBasement!=0:
+                        floor = 'basement'
+                        self.speak("Mhh, ok.")
+                    else:
+
+        return True
+
 
     
     def shoppresence(self, sentence):
