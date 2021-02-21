@@ -1,4 +1,5 @@
 import spacy
+from word2number import w2n
 
 class Parser():
 
@@ -83,13 +84,30 @@ class Parser():
                 commonWords.append(e1)
         return set(commonWords)
 
+    def makePairs(self, inputList):
+        outputList = ['']
+        for elem in inputList:
+            outputList[-1] += ' ' + elem
+            outputList.append(elem)
+        outputList.pop(-1)
+        outputList.pop(0)
+        return outputList
+
     def extractNumber(self, sentence):
-        squareMeters = None
+        number = None
         for word in self.words(sentence):
             if word.isnumeric():
-                squareMeters = int(word)
+                number = int(word)
                 break
-        return squareMeters
+        if number is None:
+            for word in self.words(sentence):
+                try:
+                    candNumber = w2n.word_to_num(word)
+                    number = candNumber
+                    break
+                except:
+                    pass
+        return number
 
         
     
@@ -106,6 +124,8 @@ if __name__ == '__main__':
             squareMeters = int(word)
             break
     print(squareMeters)
+    print(p.makePairs(['ciao', 'come']))
     #print(p.noun_chunks(sentence))
+    print(None == False)
     
     

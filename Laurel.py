@@ -8,6 +8,7 @@ import spacy
 from Parser import Parser
 import numpy as np
 
+
 #["Please provide us your complaint in order to assist you", "Please mention your complaint, we will reach you and sorry for any inconvenience caused"]
 
 '''
@@ -160,8 +161,9 @@ class Laurel():
             #try:
             #print(self.parser.words(guess))
             words = self.parser.words(guess)
-            candidates = ['apartment', 'garage', 'villa', 'land', 'box', 'flat', 'palace', 'hotel', 'terrain', 'basement', 'attic'\
-                            'apartments', 'garages', 'villas', 'lands', 'boxes', 'flats', 'palaces', 'hotels', 'terrains', 'basements', 'attics']
+            candidates = ['apartment', 'garage', 'villa', 'land', 'box', 'flat', 'palace', 'hotel', 'terrain', 'basement', 'attic',\
+                            'apartments', 'garages', 'villas', 'lands', 'boxes', 'flats', 'palaces', 'hotels', 'terrains', 'basements',\
+                            'attics', 'loft', 'lofts', 'penthouse', 'penthouses']
             commonWords = self.parser.commonWords(candidates, words)
             if len(commonWords)>=2:
                 self.speak("Please, specify one type only")
@@ -217,10 +219,11 @@ class Laurel():
         yes2 = ['it is']
         no2 = ["it isn't", "not correct", "no correct", "not right", "not ok", "not okay"]
         words = self.parser.words(sentence)
+        wordPairs = self.parser.makePairs(words)
         cwYes1 = len(self.parser.commonWords(yes1, words))
-        cwYes2 = len(self.parser.commonWords(yes2, words))
+        cwYes2 = len(self.parser.commonWords(yes2, wordPairs))
         cwNo1 = len(self.parser.commonWords(no1, words))
-        cwNo2 = len(self.parser.commonWords(no2, words))
+        cwNo2 = len(self.parser.commonWords(no2, wordPairs))
         if cwNo2!=0:
             return False
         if cwNo1+cwYes1>max(cwNo1, cwYes1):
@@ -233,12 +236,12 @@ class Laurel():
             return True
         return None
 
-    def apartmentEvaluation(self, sentence, wrong=None):
+    def apartmentEvaluation(self, sentence, wrong=None, squareMeters=None, position=None, floor=None, nBathrooms=None):
 
         if wrong is None or wrong == 'squareMeters':
             squareMeters = self.squareMetersApartment()
 
-        elif wrong is None or wrong == 'position':
+        if wrong is None or wrong == 'position':
             #Question 2
             self.speak("Is it near the center?")
             guess = None
@@ -249,7 +252,7 @@ class Laurel():
                     words = self.parser.words(guess)
                     groupCenter = ['yeah', 'yes', 'center', 'central', 'kind', 'almost', 'quite', 'near']
                     #groupSemiPeripheral = ['middle', 'semi-suburbs', 'semi-peripheral', 'semi-periphery']
-                    groupPeripheral = ['nope', 'no', 'peripheral', 'suburbs', 'periphery', 'outskirts', 'distant', 'far', 'away']
+                    groupPeripheral = ['nope', 'not', 'no', 'peripheral', 'suburbs', 'periphery', 'outskirts', 'distant', 'far', 'away']
                     commonWordsCenterLen = len(self.parser.commonWords(groupCenter, words))
                     #commonWordsSemiPeripheralLen = len(self.parser.commonWords(groupSemiPeripheral, words))
                     commonWordsPeripheralLen = len(self.parser.commonWords(groupPeripheral, words))
@@ -276,16 +279,15 @@ class Laurel():
         if wrong is None:
             self.speak("Let's continue!")
 
-        elif wrong is None or wrong == 'attic':
+        if wrong is None or wrong == 'floor':
             #Question 3
             self.speak("Is it an attic or a basement?")
             guess = None
             while guess is None:
                 guess = self.hear()['transcription']
-
-                attic = ['attic', 'last']
-                basement = ['basement', 'minus', 'garage']
-                words = self.parser.words(sentence)
+                words = self.parser.words(guess)
+                attic = ['attic', 'last', 'penthouse', 'loft']
+                basement = ['basement', 'minus', 'garage', 'underground']
                 cwAttic = len(self.parser.commonWords(attic, words))
                 cwBasement = len(self.parser.commonWords(basement, words))
 
@@ -298,14 +300,14 @@ class Laurel():
                     self.speak("Oh very good!")
                 elif cwBasement!=0:
                     floor = 'basement'
-                    self.speak("Mhh, ok.")
+                    self.speak("Mh, okey.")
                 else:
                     correct = self.isCorrect(guess)
                     if correct:
                         self.speak("Specify if it is an attic or a basement")
                         guess = None
                         continue
-                    elif not correct:
+                    elif correct == False:
                         floor = 'normal'
                         self.speak("Got it.")
                     else:
@@ -315,7 +317,7 @@ class Laurel():
         if wrong is None:
             self.speak("Last question!")
 
-        elif wrong is None or wrong == 'nBathrooms':
+        if wrong is None or wrong == 'nBathrooms':
             #Question 4
             self.speak("How many bathrooms are present?")
             guess = None
@@ -325,7 +327,7 @@ class Laurel():
                 #try:
                 nBathrooms = self.parser.extractNumber(guess)
 
-                if nBathrooms == None:
+                if nBathrooms is None:
                     guess = None
                     continue
                 elif nBathrooms <=0:
@@ -382,6 +384,7 @@ class Laurel():
                                 " Euros, we could publish an announcement asking "+str(round(evaluation*1.15))+\
                                 " Euros that is 15 percent higher than his real value. If you want we can publish an announcement, do you agree?"
                 self.speak(sentenceToTell)
+                guess = None
                 while guess is None:
                     guess = self.hear()["transcription"]
                     correctness = self.isCorrect(guess)
@@ -400,27 +403,41 @@ class Laurel():
                 guess = None
                 while guess is None:
                     guess = self.hear()["transcription"]
-                    squareMeters = ['square', 'meters', 'metres', 'meter', 'metre', 'dimensions', 'dimension',\
+                    words = self.parser.words(guess)
+                    squareMetersCand = ['square', 'meters', 'metres', 'meter', 'metre', 'dimensions', 'dimension',\
                                     'size', 'big', 'small', 'squared', 'squares', 'area', 'surface', 'walkable']
-                    position = ['position', 'place', 'where', 'site', 'zone' 'location', 'center', 'central', 'peripheral',\
+                    positionCand = ['position', 'place', 'where', 'site', 'zone' 'location', 'center', 'central', 'peripheral',\
                                  'suburbs', 'suburbs', 'periphery', 'outskirts', 'semi-suburbs', 'semi-suburbs']
-                    attic = ['attic', 'last', 'basement', 'minus', 'garage', 'floor']
-                    nBathrooms = ['bathrooms', 'restroom', 'bath', 'bathroom', 'restrooms', 'room', 'rooms']
-                    words = self.parser.words(sentence)
-                    cwAttic = len(self.parser.commonWords(attic, words))
-                    cwBasement = len(self.parser.commonWords(basement, words))
+                    floorCand = ['attic', 'last', 'basement', 'minus', 'garage', 'floor', 'ground', 'underground', 'penthouse', 'loft']
+                    nBathroomsCand = ['bathrooms', 'restroom', 'bath', 'bathroom', 'restrooms', 'room', 'rooms']
+                    cwSquareMeters = len(self.parser.commonWords(squareMetersCand, words))
+                    cwPosition = len(self.parser.commonWords(positionCand, words))
+                    cwFloor = len(self.parser.commonWords(floorCand, words))
+                    cwNBathrooms = len(self.parser.commonWords(nBathroomsCand, words))
 
-                    if cwAttic+cwBasement>max(cwAttic, cwBasement):
+                    if cwSquareMeters+cwPosition+cwFloor+cwNBathrooms>max(cwSquareMeters, cwPosition, cwFloor, cwNBathrooms):
                         self.speak("Please, give me a unique answer")
                         guess = None
                         continue
-                    elif cwAttic!=0:
-                        floor = 'attic'
-                        self.speak("Oh very good!")
-                    elif cwBasement!=0:
-                        floor = 'basement'
-                        self.speak("Mhh, ok.")
+                    elif cwSquareMeters!=0:
+                        self.speak("Oh, I'm sorry, I've missunderstood")
+                        return self.apartmentEvaluation(None, wrong='squareMeters', squareMeters=squareMeters, position=position,\
+                                                        floor=floor, nBathrooms=nBathrooms)
+                    elif cwPosition!=0:
+                        self.speak("Oh, I'm sorry, I've missunderstood")
+                        return self.apartmentEvaluation(None, wrong='position', squareMeters=squareMeters, position=position,\
+                                                        floor=floor, nBathrooms=nBathrooms)
+                    elif cwFloor!=0:
+                        self.speak("Oh, I'm sorry, I've missunderstood")
+                        return self.apartmentEvaluation(None, wrong='floor', squareMeters=squareMeters, position=position,\
+                                                        floor=floor, nBathrooms=nBathrooms)
+                    elif cwNBathrooms!=0:
+                        self.speak("Oh, I'm sorry, I've missunderstood")
+                        return self.apartmentEvaluation(None, wrong='nBathrooms', squareMeters=squareMeters, position=position,\
+                                                        floor=floor, nBathrooms=nBathrooms)
                     else:
+                        guess = None
+                        continue
 
         return True
 
@@ -743,3 +760,5 @@ class Laurel():
         
     def notunderstood(self):
         self.speak("I have not understood, can you please repeat?")
+
+print(Laurel(None, None, None).isCorrect("has it told you already"))

@@ -7,3 +7,4 @@ print("ciao")
 !pip install pickle
 !pip install gTTS
 !pip install spacy
+!pip install word2number
