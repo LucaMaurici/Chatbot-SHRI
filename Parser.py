@@ -93,21 +93,23 @@ class Parser():
         outputList.pop(0)
         return outputList
 
-    def extractNumber(self, sentence):
-        number = None
+    def extractNumbers(self, sentence):
+        numbers = list()
         for word in self.words(sentence):
             if word.isnumeric():
-                number = int(word)
-                break
-        if number is None:
-            for word in self.words(sentence):
+                numbers.append(int(word))
+            else:
                 try:
                     candNumber = w2n.word_to_num(word)
-                    number = candNumber
-                    break
+                    numbers.append(int(candNumber))
                 except:
                     pass
-        return number
+        #for bathrooms
+        candidates = ['a bathroom', 'another one', 'another bathroom']
+        for pair in self.makePairs(self.words(sentence)):
+            if self.shareWords(word, candidates):
+                numbers.append(1)
+        return numbers
 
         
     
