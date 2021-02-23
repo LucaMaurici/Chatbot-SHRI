@@ -35,7 +35,7 @@
 				"could you check the availability of some houses", "i would like to buy an house", 
 				 "i would like to buy a propery", "i want to invest money in a property", "i want to invest money in real estate", "are there interesting offers",
 				 "are there interesting offers in this period", "can you give me some information about the current real estate market", "i want to buy an house",
-				 " i want to by a villa", "i would like to buy", "i would like to make an investment"]
+				 " i want to by a villa", "i would like to buy", "i would like to make an investment", "i would like to buy a villa"]
 	},
 	{"tag" : "disablepeople",
 	"patterns": ["what kind of services are available for disable people", "Do you offer any kind of assistance for disable people", "which kind of assistance do you offer for people with disabilities"]

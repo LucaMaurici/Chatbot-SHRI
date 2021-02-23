@@ -29,7 +29,7 @@ def chat():
     while continueConversation:
 
         guess = assistent.hear()
-        inp = guess["transcription"]
+        inp = guess["transcription"].lower()
         #try:
         result = model.predict(keras.preprocessing.sequence.pad_sequences(tokenizer.texts_to_sequences([inp]),
                                              truncating='post', maxlen=max_len))
