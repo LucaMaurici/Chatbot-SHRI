@@ -11,9 +11,6 @@
     {"tag": "help",
     "patterns": ["I don't know what to do"]
     },
-    {"tag": "complaint",
-    "patterns": ["you lost my luggage"]
-    },
 
     {"tag": "evaluation",
 	"patterns": ["i don't not how much the place where i live could value"]
@@ -21,8 +18,11 @@
 	{"tag": "apartmentEvaluation",
 	"patterns": ["i don't not how much the room where i live could value"]
 	},
-	{"tag": "garageEvaluation",
+	{"tag": "villaEvaluation",
 	"patterns": ["i don't not how much the place where i park my auto could value"]
+	},
+	{"tag": "housesAvailability",
+	"patterns": ["i would like to buy an house"]
 	},
 
 	{"tag": "disablepeople",

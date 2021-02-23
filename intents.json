@@ -11,26 +11,32 @@
     {"tag": "help",
     "patterns": ["Could you help me?", "give me a hand please", "Can you help?", "What can you do for me?", "I need a support", "I need a help", "support me please"]
     },
-    {"tag": "complaint",
-    "patterns": ["have a complaint", "I want to raise a complaint", "there is a complaint about a service", "complaint", "i have a complaint"]
-    },
 
     {"tag": "evaluation",
 	"patterns": ["i need an evaluation", "i would need an evaluation", "i need a real estate valuation", "i would like to evaluate my property",
 	 "is there someone who can evaluate a property", "could you make a real estate estiamte", "i would like to sell my property", 
 	 "i would like to know a good price for a property","i would like to know a good price for my estate", "i want to evaluate my propery", 
 	 "can you estimate the price of my estate", "can you evaluate my estate", "i would like to know a good price for my house", 
-	 "can you evaluate my house", "i would like to evaluate my house"]
+	 "can you evaluate my house", "i would like to evaluate my house", "is there someone who can evaluate a property"]
 	},
 	{"tag": "apartmentEvaluation",
-	"patterns": ["is there someone who can evaluate a property", "could you make a real estate estiamte for my apartment", "i would like to sell my apartment", 
-	 "i would like to know a good price for my apartment", "i would like to evaluate my attic", "i need an apartment evaluation",
-	 "i would like to evaluate my basement", "can you evaluate my villa"]
+	"patterns": ["could you make a real estate estiamate for my apartment", "i would like to sell my apartment", 
+	 "i would like to know a good price for my apartment", "i would like to evaluate my attic", "i need an apartment evaluation", "loft",
+	 "i would like to evaluate my basement", "can you evaluate my loft", "i need to estimate the price of my penthouse", "i would like to evaluate my apartment"]
 	},
-	{"tag": "garageEvaluation",
-	"patterns": ["i would like to know a good price for my garage"]
+	{"tag": "villaEvaluation",
+	"patterns": ["i would like to know a good price for my villa", "could you make a real estate estiamate for my villa", "i would like to sell my villa", 
+	 "i would like to know a good price for my villa", "i would like to evaluate my attic", "i need an villa evaluation", "villa",
+	 "i would like to evaluate my villa", "can you evaluate my villa", "i need to estimate the price of my mansion"]
 	},
-
+	{
+	"tag": "housesAvailability",
+	"patterns": ["i would like to know if there are houses in this zone", "i would like to know if there are houses",
+				"could you check the availability of some houses", "i would like to buy an house", 
+				 "i would like to buy a propery", "i want to invest money in a property", "i want to invest money in real estate", "are there interesting offers",
+				 "are there interesting offers in this period", "can you give me some information about the current real estate market", "i want to buy an house",
+				 " i want to by a villa", "i would like to buy", "i would like to make an investment"]
+	},
 	{"tag" : "disablepeople",
 	"patterns": ["what kind of services are available for disable people", "Do you offer any kind of assistance for disable people", "which kind of assistance do you offer for people with disabilities"]
 	}
