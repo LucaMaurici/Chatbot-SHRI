@@ -8,42 +8,6 @@ import spacy
 from Parser import Parser
 import numpy as np
 
-
-#["Please provide us your complaint in order to assist you", "Please mention your complaint, we will reach you and sorry for any inconvenience caused"]
-
-'''
-
-{"tag": "shoptypes",
-	"patterns": ["which kind of shops are there in the airport", "which types of shops can I find in the airport", "what kind of shops are there in the airport"]
-	},
-{"tag": "about",
-     "patterns": ["Who are you?", "What are you?", "Who you are?" ]
-    },
-    {"tag": "name",
-    "patterns": ["what is your name", "what should I call you", "whats your name?"]
-    },
-    
-    def shops(self, sentence):
-        rnd1 = random.randint(0,len(self.shop_list)-1)
-        rnd2 = random.randint(0,len(self.shop_list)-1)
-        while rnd1 == rnd2:
-            rnd2 = random.randint(0,len(self.shop_list)-1)
-        print('Some of the shops you can find here are the followings: ' +  self.shop_list[rnd1] + ', ' + self.shop_list[rnd2])
-        self.speak('Some of the shops you can find here are the followings: ' +  self.shop_list[rnd1] + ', ' + self.shop_list[rnd2])
-        return True
-    
-    def shoptypes(self, sentence):
-        rnd1 = random.randint(0,len(self.shop_types)-1)
-        rnd2 = random.randint(0,len(self.shop_types)-1)
-        while rnd1 == rnd2:
-            rnd2 = random.randint(0,len(self.shop_types)-1)
-        print('For example you can find these types of shops: ' +  self.shop_types[rnd1] + ', ' + shop_types[rnd2])
-        self.speak('For example you can find these types of shops: ' +  shop_types[rnd1] + ', ' + shop_types[rnd2])
-        return True
-'''
-
-#sistemare la conferma della prenotazione volo
-
 class Laurel():
 
     def __init__(self, recognizer, microphone, limit):
@@ -143,7 +107,7 @@ class Laurel():
 
     def checkStop(self, guess):
         words = self.parser.words(guess)
-        candidates = ['stop', 'shut', 'silent', 'quit', 'cancel', 'enough']
+        candidates = ['stop', 'shut', 'silent', 'quit', 'cancel', 'enough', 'exit']
         return self.parser.shareWords(words, candidates)
 
     def evaluation(self, sentence):
@@ -170,7 +134,8 @@ class Laurel():
                     guess = None
                     continue
                 elif self.parser.shareWords(commonWords, ['apartment', 'apartments', 'basement', 'attic', 'basements','attics', 'loft', 'lofts',\
-                                                             'penthouse', 'penthouses', 'arctic', 'synoptic', 'haptic', 'optic', 'neurotic', 'somatic', 'synaptic']):
+                                                             'penthouse', 'penthouses', 'arctic', 'synoptic', 'haptic', 'optic', 'neurotic', 'somatic',\
+                                                             'flat', 'flats', 'synaptic']):
                     return self.apartmentEvaluation(sentence)
                 else:
                     guess = None
@@ -650,293 +615,70 @@ class Laurel():
         while guess is None:
             guess = self.hear()
             guess = guess["transcription"]
-            #try:
-            guess = guess.replace("€", "")
-            guess = guess.replace("$", "")
-            guess = guess.replace(",", "")
-            guess = guess.replace(" millions", "000000")
-            guess = guess.replace(" million", "000000")
-            guess = guess.replace(" median", "000000")
-            guess = guess.lower()
-            if self.checkStop(guess): return True
-            print(guess)
-            budget = self.parser.extractNumbers(guess)
-            print(budget)
-            if len(budget)!=0:
-                budget = int(round(sum(budget)/len(budget), -4))
+            try:
+                guess = guess.replace("€", "")
+                guess = guess.replace("$", "")
+                guess = guess.replace(",", "")
+                guess = guess.replace(" millions", "000000")
+                guess = guess.replace(" million", "000000")
+                guess = guess.replace(" median", "000000")
+                guess = guess.lower()
+                if self.checkStop(guess): return True
+                print(guess)
+                budget = self.parser.extractNumbers(guess)
                 print(budget)
-                if budget<=10000:
-                    self.speak("Probably I didn't get it, it's impossible at that price! Can you repeat, please?")
+                if len(budget)!=0:
+                    budget = int(round(sum(budget)/len(budget), -4))
+                    print(budget)
+                    if budget<=10000:
+                        self.speak("Probably I didn't get it, it's impossible at that price! Can you repeat, please?")
+                        guess = None
+                        continue
+                    numHouses = random.randint(0, 4)
+                    print(numHouses)
+                    numHouses /= 2
+                    print(numHouses)
+                    if numHouses == 0:
+                        answer = "I'm sorry but we don't have houses in line with your budget. Come back later, you may be lucky"
+                    elif numHouses == 1:
+                        answer = "We have an house which costs "+str(int(round(budget*1.1)))+" Euros, which is a little bit more than your budget."+\
+                                    "If you are interested anyway, when you want, you can schedule an appointment with an our agent."
+                    elif numHouses == 2:
+                        answer = "We have two houses which cost "+str(int(round(budget*0.9)))+" Euros and "+str(int(round(budget*1.1)))+" Euros which is around your budget."+\
+                                    "If you are interested, when you want, you can schedule an appointment with an our agent."
+                    self.speak(answer)
+                else:
                     guess = None
                     continue
-                numHouses = random.randint(0, 4)
-                print(numHouses)
-                numHouses /= 2
-                print(numHouses)
-                if numHouses == 0:
-                    answer = "I'm sorry but we don't have houses in line with your budget. Come back later, you may be lucky"
-                elif numHouses == 1:
-                    answer = "We have an house which costs "+str(int(round(budget*1.1)))+" Euros, which is a little bit more than your budget."+\
-                                "If you are interested anyway, when you want, you can schedule an appointment with an our agent."
-                elif numHouses == 2:
-                    answer = "We have two houses which cost "+str(int(round(budget*0.9)))+" Euros and "+str(int(round(budget*1.1)))+" Euros which is around your budget."+\
-                                "If you are interested, when you want, you can schedule an appointment with an our agent."
-                self.speak(answer)
-            else:
+
+            except:
                 guess = None
-                continue
-
-            #except:
-                #guess = None
         return True
 
 
-    
-    def shoppresence(self, sentence):
-        complobj = None
-        chunks = self.parser.noun_chunks(sentence)
-        complobj = chunks['dobj'] if 'dobj' in chunks.keys() else chunks['attr']
-        while complobj is None:
-            self.speak("I've not understood. Please repeat.")
-            guess = self.hear()
-            sentence = guess["transcription"]
-            chunks = self.parser.noun_chunks(sentence)
-            complobj = chunks['dobj'] if 'dobj' in chunks.keys() else chunks['attr']
-        
-        complobj = complobj.lower()
-        here = False
-        for string in self.shop_list:
-            if complobj in string or string in complobj:
-                here = True
-        if not here:
-            for string in self.shop_type_list:
-                if complobj in string or string in complobj:
-                    here = True
-        if here:
-            self.speak("Yes, you can find " + complobj + ' in our airport!')
-        else:
-            rnd1 = random.randint(0,len(self.shop_type_list)-1)
-            rnd2 = random.randint(0,len(self.shop_type_list)-1)
-            while rnd1 == rnd2:
-                rnd2 = random.randint(0,len(self.shop_type_list)-1)
-            self.speak("No, I'm really sorry about this. But you can find some other very interesting shops like: "+  self.shop_type_list[rnd1] + ', ' + self.shop_type_list[rnd2])
-        return True  
-        
-    
-        
-    def flightinfo(self, sentence):
-        self.speak("To avoid any mistake looking for the status of your flight, please tell me only the code of your flight with clear voice")
-        guess = None
-        isValid = False
-        while guess is None or not isValid:
-            guess = self.hear()
-            guess = guess["transcription"]
-            if self.checkflightcode(guess):
-                isValid = True
-            else:
-                self.speak("That is not a valid code. Try again please.")
-        code = guess.lower()
-        
-        rnd1 = random.randint(0,len(self.shop_type_list)-1)
-        rnd2 = random.randint(0,len(self.shop_type_list)-1)
-        while rnd1 == rnd2:
-            rnd2 = random.randint(0,len(self.shop_type_list)-1)
-        departure = self.cities[rnd1]
-        destination = self.cities[rnd2]
-        
-        delays = ["15 minutes", "30 minutes", "1 hour", "2 hours", "4 hours"]
-        status = ["in time", "cancelled", "delayed"]
-        rnd = random.randint(0,len(status)-1)
-        rndstatus = status[rnd]
-        
-        randomtime = random. randint(8, 22)
-        
-        s = "Your flight with code " + code.replace(" ", "") + "from " + departure + " to " + destination +"is " + rndstatus
-        
-        if rndstatus == "delayed":
-            rnd = random.randint(0,len(delays)-1)
-            rnddelay = delays[rnd]
-            statussentence = " of " + rnddelay + " .I'm sorry"
-        elif rndstatus == "in time":
-            statussentence = " .So it will leave at " + str(randomtime) + "o'clock."
-        else:
-            statussentence = " I'm really sorry about this."
-            
-        self.speak(s+statussentence)
-        return True
-    
-    def findcities(self, children, entities, prep):
-        city = None
-        print(entities)
-        if prep in children:
-            try:
-                city = children[prep][0] if children[prep][0] in entities["GPE"] else None
-                print(city)
-            except:
-                return city
-        return city
-    
-    def flight(self, sentence):
-        children= self.parser.parse(sentence)
-        entities = self.parser.entities(sentence)
-        departure = self.findcities(children, entities, 'from')
-        destination = self.findcities(children, entities,'to')
-        while departure is None:
-            self.speak("from where do you want to leave?")
-            guess = self.hear()
-            try:
-                entities = self.parser.entities(guess["transcription"])
-                departure = entities["GPE"]
-            except:
-                departure = None
-        while destination is None:
-            self.speak("where do you want to go?")
-            guess = self.hear()
-            try:
-                entities = self.parser.entities(guess["transcription"])
-                destination = entities["GPE"]
-            except:
-                destination = None
-        '''
-        if 'for' in children:
-            when = children['for'][0]
-        '''
-        if 'DATE' in entities.keys():
-            when = entities["DATE"]
-        else:    
-            self.speak("when do you want to leave?")
-            guess = None
-            while guess is None:
-                guess = self.hear()
-                guess = guess["transcription"]
-                try:
-                    ent = self.parser.entities(guess)
-                    guess = ent["DATE"]
-                except: 
-                    guess = None
-            when = guess
-         
-        return departure, destination, when
-        
-    def flightbooking(self, sentence):
-        randomprice = random.randint(20,400)
-        randomtime = random. randint(8, 22)
-        randomexistence = random.randint(0,1)
-        
-        departure, destination, when = self.flight(sentence)
-        if randomexistence == 0:
-            self.speak("I'm really sorry about this, but there is no flight like this")
-        else:
-            self.speak("Yes, there is a flight from " + str(departure) + " to " + str(destination) + " for " + str(when) + ". It's cost is " + str(randomprice) + "euros " +\
-            "and it leaves at " + str(randomtime) + "o'clock. Do you want me to book it for you?")
-            self.flightconf(departure, destination, when)
-        return True
-    
-    #Diventa prendi un appuntamento
-    def disablepeople(self, sentence):
-        self.speak("Dear customer, we offer any kind of assistance for people with disabilities. \
-        The airport offers assistance for any displacement in the airport, help for flights information and for luggage displacement\
-        . Which kind of assistance do you need?")
-        
+    def appointment(self, sentence):
+        self.speak("Yes, we can arrange an appointment with an our agent. When do you prefer?")
         guess = None
         while guess is None:
-            guess = self.hear()
-            guess = guess["transcription"]
-        assistance_needed = guess
-        self.speak("When do you need it?")
-        guess = None
-        while guess is None:
-            guess = self.hear()
-            guess = guess["transcription"]
             try:
+                guess = self.hear()["transcription"].lower()
+                if self.checkStop(guess): return True
+                guess = guess.replace("about ", "")
+                guess = guess.replace(" about", "")
                 ent = self.parser.entities(guess)
-                guess = ent["DATE"]
-            except: 
-                guess = None
-        when = guess
-        self.speak("Perfect, one of our dependents will be available for you " + when + "for the assistance service you have chosen: "+ assistance_needed)
-        return True
-        
-    def wheretobuy(self, sentence):
-        complobj = None
-        chunks = self.parser.noun_chunks(sentence)
-        print (chunks)
-        complobj = chunks['dobj'] if 'dobj' in chunks.keys() else None
-        while complobj is None:
-            self.speak("I've not understood. Please repeat.")
-            guess = self.hear()
-            sentence = guess["transcription"]
-            chunks = self.parser.noun_chunks(sentence)
-            complobj = chunks['dobj'] if 'dobj' in chunks.keys() else None
-        
-        soldhere = False 
-        
-        for string in self.items:
-            if string in complobj or complobj in string:
-                soldhere = True
-                break
-            
-        if soldhere:
-            str = ""
-            for i in self.items2shops[string]:
-                str = str + i
-                str = str + ", "
-            self.speak("You can buy " + complobj + "in the following shops: "+ str)
-            
-        else:
-            self.speak("I'm really sorry, there are no shops selling what you are looking for")
-        return True
-    
-    def rentacar(self,sentence):
-        self.speak("Yes, which kind of car do you need? The followings are the models we have available: luxury car, mini van, utilitarian car.")
-        guess = None
-        while guess is None or guess not in self.car_models:
-            guess = self.hear()
-            guess = guess["transcription"]
-            if guess not in self.car_models:
-                self.speak("this model is not available, sorry, try with another one")
-        car_model = guess
-        isValid = False
-        self.speak("For how many days do you need it?. Please specify the exact number of days")
-        guess = None
-        while guess is None:
-            guess = self.hear()
-            guess = guess["transcription"]
-            try:
-                ent = self.parser.entities(guess)
-                guess = ent["DATE"]
-            except: 
-                guess = None
-        num_days = guess
-        
-        self.speak("Ok, you have rent a " + car_model + " for "+ num_days)
-        
-        return True
-
-    def bookhotel(self, sentence):
-        self.speak("I can suggest you a wonderful hotel near the airport. The Royal hotel. Do you want me to book a room there for you?")
-        guess = None
-        while guess is None:
-            guess = self.hear()
-            guess = guess["transcription"]
-        confirm = guess
-        if "yes" in confirm or "Yes" in confirm:
-            self.speak("For how many days do you need it?. Please specify the exact number of days")
-            guess = None
-            while guess is None:
-                guess = self.hear()
-                guess = guess["transcription"]
-                try:
-                    ent = self.parser.entities(guess)
-                    guess = ent["DATE"]
-                except: 
+                guess = ent["DATE"][0]
+                when = guess
+                if when == 'yesterday':
                     guess = None
-            num_days = guess
-            
-            self.speak("Ok, I have booked for you a room in the Royal hotel for" + num_days)
-        else:
-            self.speak("Ok, I'm here for you when you want")
-        return True
-        
+                    continue
+                choice = random.randint(0, 1)
+                if choice == 0:
+                    self.speak("I'm sorry, but for "+ when + "all our agents are unavailable. Please tell me another date.")
+                    guess = None
+                    continue
+                else:
+                    self.speak("Ok, I scheduled it for " + when + " with " + random.choice(['John', 'Mark', 'Mattew', 'Luke', 'Mary', 'Joseph']))
+            except:
+                guess = None
 
-print(Laurel(None, None, None).isCorrect("has it told you already"))
+        return True

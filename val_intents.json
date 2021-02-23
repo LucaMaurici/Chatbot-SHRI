@@ -24,9 +24,8 @@
 	{"tag": "housesAvailability",
 	"patterns": ["i would like to buy an house"]
 	},
-
-	{"tag": "disablepeople",
-	"patterns": ["i'm dsa"]
+	{"tag": "appointment",
+	"patterns": ["i really want a human who can help me with an evaluation"]
 	}
 ]
 }	

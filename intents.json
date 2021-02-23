@@ -17,17 +17,21 @@
 	 "is there someone who can evaluate a property", "could you make a real estate estiamte", "i would like to sell my property", 
 	 "i would like to know a good price for a property","i would like to know a good price for my estate", "i want to evaluate my propery", 
 	 "can you estimate the price of my estate", "can you evaluate my estate", "i would like to know a good price for my house", 
-	 "can you evaluate my house", "i would like to evaluate my house", "is there someone who can evaluate a property"]
+	 "can you evaluate my house", "i would like to evaluate my house", "is there someone who can evaluate a property", "can you tell me the right price for a property",
+	 "i would need an estimate"]
 	},
 	{"tag": "apartmentEvaluation",
 	"patterns": ["could you make a real estate estiamate for my apartment", "i would like to sell my apartment", 
 	 "i would like to know a good price for my apartment", "i would like to evaluate my attic", "i need an apartment evaluation", "loft",
-	 "i would like to evaluate my basement", "can you evaluate my loft", "i need to estimate the price of my penthouse", "i would like to evaluate my apartment"]
+	 "i would like to evaluate my basement", "can you evaluate my loft", "i need to estimate the price of my penthouse", "i would like to evaluate my apartment",
+	 "i would like to evaluate my flat", "can you tell me the right price for an apartment", "i would need an estimate for my flat",
+	 "i would need an evaluation for my flat"]
 	},
 	{"tag": "villaEvaluation",
 	"patterns": ["i would like to know a good price for my villa", "could you make a real estate estiamate for my villa", "i would like to sell my villa", 
 	 "i would like to know a good price for my villa", "i would like to evaluate my attic", "i need an villa evaluation", "villa",
-	 "i would like to evaluate my villa", "can you evaluate my villa", "i need to estimate the price of my mansion"]
+	 "i would like to evaluate my villa", "can you evaluate my villa", "i need to estimate the price of my mansion", "can you tell me the right price for a villa",
+	 "i would need an estimate for my villa", "i would need an evaluation for my house with garden"]
 	},
 	{
 	"tag": "housesAvailability",
@@ -35,10 +39,16 @@
 				"could you check the availability of some houses", "i would like to buy an house", 
 				 "i would like to buy a propery", "i want to invest money in a property", "i want to invest money in real estate", "are there interesting offers",
 				 "are there interesting offers in this period", "can you give me some information about the current real estate market", "i want to buy an house",
-				 " i want to by a villa", "i would like to buy", "i would like to make an investment", "i would like to buy a villa"]
+				 " i want to by a villa", "i would like to buy", "i would like to make an investment", "i would like to buy a villa", "what offers the market", 
+				 "what is offering the market", "are there some houses to show me"]
 	},
-	{"tag" : "disablepeople",
-	"patterns": ["what kind of services are available for disable people", "Do you offer any kind of assistance for disable people", "which kind of assistance do you offer for people with disabilities"]
+	{"tag" : "appointment",
+	"patterns": ["i would like to take an appointment", "i would like to schedule an appointment", "i want to schedule an appointment", 
+		"i need an appointment with an agent", "appointment", "i would like to meet a consulent", "can we arrange a meeting with a consulent",
+		"can we arrange a meeting with an agent", "i would like to see an house", "i would like to see a villa", "i would like to see an apartment",
+		"i would like to schedule an arrangement", "i would like to show you my house", "is it possible to show you my property", "can i show you my flat",
+		"i would need an advice", "i need an advice", "i would like to speak with an adivsor", "i would like to speak with consulent",
+		"i would like to speak with an agent", "i would like to speak with someone", "i would like to speak with a human", "i would to talk with a human"]
 	}
 ]
 }
