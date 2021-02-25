@@ -9,7 +9,7 @@
      "patterns": ["Thanks", "Thank you", "That's helpful", "Thanks for the help", "thanks", "thank you", "thank you very much"]
     },
     {"tag": "help",
-    "patterns": ["Could you help me?", "give me a hand please", "Can you help?", "What can you do for me?", "I need a support", "I need a help", "support me please"]
+    "patterns": ["Could you help me?", "give me a hand please", "Can you help?", "What can you do for me?", "i need a support", "i need a help", "support me please"]
     },
 
     {"tag": "evaluation",
@@ -18,7 +18,7 @@
 	 "i would like to know a good price for a property","i would like to know a good price for my estate", "i want to evaluate my propery", 
 	 "can you estimate the price of my estate", "can you evaluate my estate", "i would like to know a good price for my house", 
 	 "can you evaluate my house", "i would like to evaluate my house", "is there someone who can evaluate a property", "can you tell me the right price for a property",
-	 "i would need an estimate"]
+	 "i would need an estimate", "I would like to evaluate"]
 	},
 	{"tag": "apartmentEvaluation",
 	"patterns": ["could you make a real estate estiamate for my apartment", "i would like to sell my apartment", 

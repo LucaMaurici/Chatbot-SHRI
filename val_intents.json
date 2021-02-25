@@ -9,7 +9,7 @@
      "patterns": ["you are kind"]
     },
     {"tag": "help",
-    "patterns": ["I don't know what to do"]
+    "patterns": ["i don't know what to do"]
     },
 
     {"tag": "evaluation",

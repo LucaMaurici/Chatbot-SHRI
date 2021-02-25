@@ -125,8 +125,8 @@ class Laurel():
                 if self.checkStop(guess): return True
                 #print(self.parser.words(guess))
                 words = self.parser.words(guess)
-                candidates = ['apartment', 'garage', 'villa', 'land', 'box', 'flat', 'palace', 'hotel', 'terrain', 'basement', 'attic',\
-                                'apartments', 'garages', 'villas', 'lands', 'boxes', 'flats', 'palaces', 'hotels', 'terrains', 'basements',\
+                candidates = ['apartment', 'villa', 'flat', 'basement', 'attic', 'garden', 'gardens',\
+                                'apartments', 'villas', 'flats', 'palaces', 'basements',\
                                 'attics', 'loft', 'lofts', 'penthouse', 'penthouses', 'arctic', 'synoptic', 'haptic', 'optic', 'neurotic', 'somatic', 'synaptic']
                 commonWords = self.parser.commonWords(candidates, words)
                 if len(commonWords)>=2:
@@ -137,6 +137,8 @@ class Laurel():
                                                              'penthouse', 'penthouses', 'arctic', 'synoptic', 'haptic', 'optic', 'neurotic', 'somatic',\
                                                              'flat', 'flats', 'synaptic']):
                     return self.apartmentEvaluation(sentence)
+                elif self.parser.shareWords(commonWords, ['villa', 'villas', 'garden', 'gardens']):
+                    return self.villaEvaluation(sentence)
                 else:
                     guess = None
             except: 
@@ -252,6 +254,7 @@ class Laurel():
         #Question 2
         self.speak("Is it near the center?")
         guess = None
+        postion = None
         while guess is None:
             guess = self.hear()
             guess = guess["transcription"]
@@ -284,11 +287,13 @@ class Laurel():
                     continue
             except: 
                 guess = None
+        return position
 
     def floor(self):
         #Question 3
         self.speak("Is it an attic or a basement?")
         guess = None
+        floor = None
         while guess is None:
             guess = self.hear()['transcription']
             try:
@@ -324,11 +329,13 @@ class Laurel():
                         continue
             except:
                 guess = None
+        return floor
 
     def nBathrooms(self):
         #Question 4
         self.speak("How many bathrooms are present?")
         guess = None
+        nBathrooms = None
         while guess is None:
             guess = self.hear()
             guess = guess["transcription"]
@@ -359,26 +366,31 @@ class Laurel():
                     continue
             except: 
                 guess = None
+        return nBathrooms
 
     def apartmentEvaluation(self, sentence, wrong=None, squareMeters=None, position=None, floor=None, nBathrooms=None):
 
         if wrong is None or wrong == 'squareMeters':
             squareMeters = self.squareMetersHouse('apartment')
+            if squareMeters is True: return True
 
         if wrong is None or wrong == 'position':
             position = self.position()
+            if position is True: return True
 
         if wrong is None:
             self.speak("Let's continue!")
 
         if wrong is None or wrong == 'floor':
             floor = self.floor()
+            if floor is True: return True
 
         if wrong is None:
             self.speak("Last question!")
 
         if wrong is None or wrong == 'nBathrooms':
             nBathrooms = self.nBathrooms()
+            if nBathrooms is True: return True
 
         sentenceToTell = "So, let's do a summary! Your apartment is in "+position
 
@@ -493,12 +505,15 @@ class Laurel():
 
         if wrong is None or wrong == 'squareMeters':
             squareMetersGarden = self.squareMetersGarden()
+            if squareMetersGarden is True: return True
 
         if wrong is None or wrong == 'squareMeters':
             squareMeters = self.squareMetersHouse()
+            if squareMeters is True: return True
 
         if wrong is None or wrong == 'position':
             position = self.position()
+            if position is True: return True
 
         if wrong is None:
             self.speak("Let's continue!")
@@ -508,6 +523,7 @@ class Laurel():
 
         if wrong is None or wrong == 'nBathrooms':
             nBathrooms = self.nBathrooms()
+            if nBathrooms is True: return True
 
         sentenceToTell = "So, let's do a summary! Your villa is in "+position
 
@@ -609,7 +625,7 @@ class Laurel():
         answers = ["There are some houses available, how much do you want to spend?",
                     "There are some options depending on how much money you can spend. How much is it?",
                     "How much do you want to spend?"]
-        choice = random.randint(0,len(answers)-1)
+        choice = random.randint(0, len(answers)-1)
         self.speak(answers[choice])
         guess = None
         while guess is None:
@@ -634,9 +650,7 @@ class Laurel():
                         self.speak("Probably I didn't get it, it's impossible at that price! Can you repeat, please?")
                         guess = None
                         continue
-                    numHouses = random.randint(0, 4)
-                    print(numHouses)
-                    numHouses /= 2
+                    numHouses = random.randint(0, 2)
                     print(numHouses)
                     if numHouses == 0:
                         answer = "I'm sorry but we don't have houses in line with your budget. Come back later, you may be lucky"
@@ -644,7 +658,7 @@ class Laurel():
                         answer = "We have an house which costs "+str(int(round(budget*1.1)))+" Euros, which is a little bit more than your budget."+\
                                     "If you are interested anyway, when you want, you can schedule an appointment with an our agent."
                     elif numHouses == 2:
-                        answer = "We have two houses which cost "+str(int(round(budget*0.9)))+" Euros and "+str(int(round(budget*1.1)))+" Euros which is around your budget."+\
+                        answer = "We have two houses which cost "+str(int(round(budget*0.85)))+" Euros and "+str(int(round(budget*1.1)))+" Euros which is around your budget."+\
                                     "If you are interested, when you want, you can schedule an appointment with an our agent."
                     self.speak(answer)
                 else:
