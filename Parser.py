@@ -1,10 +1,15 @@
 import spacy
+from spacy import displacy
 from word2number import w2n
 
 class Parser():
 
     def __init__(self):
         self.nlp = spacy.load("en_core_web_sm")
+
+    def plotDependencyParser(self, sentence):
+        sentence = self.nlp(sentence)
+        displacy.serve(sentence, style='dep')
     
     def noun_chunks(self, sentence):
         chunck_dict = {}
@@ -129,5 +134,8 @@ if __name__ == '__main__':
     print(p.makePairs(['ciao', 'come']))
     #print(p.noun_chunks(sentence))
     print(None == False)
+
+    print("\n\n---DEPENDENCY PARSER---\n")
+    p.plotDependencyParser("I would like to evaluate an apartment")
     
     

@@ -230,7 +230,7 @@ class Laurel():
     def isCorrect(self, sentence):
         yes1 = ['yeah', 'yes', 'correct', 'positive', 'right', 'ok', 'okay', 'proceed']
         no1 = ['no', 'nope', 'not' 'negative', 'wrong', 'neither', 'mistake']
-        yes2 = ['it is']
+        yes2 = ['it is', 'of course']
         no2 = ["it isn't", "not correct", "no correct", "not right", "not ok", "not okay"]
         words = self.parser.words(sentence)
         wordPairs = self.parser.makePairs(words)
