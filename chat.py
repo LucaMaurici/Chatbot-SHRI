@@ -10,6 +10,9 @@ import speech_recognition as sr
 class notsure(Exception):
     pass
 
+class nosense(Exception):
+    pass
+
 def chat():
     # load trained model
     model = keras.models.load_model('model')
@@ -35,7 +38,7 @@ def chat():
             result = model.predict(keras.preprocessing.sequence.pad_sequences(tokenizer.texts_to_sequences([inp]),
                                                  truncating='post', maxlen=max_len))
             print(np.max(result))
-            if np.max(result) < 0.2:
+            if np.max(result) < 0.23:
                 raise nosense
             if np.max(result) < 0.5:
                 raise notsure
@@ -51,7 +54,7 @@ def chat():
         except notsure:
             assistent.speak("I'm not sure of what you have asked to me.")
         except nosense:
-            pass
+            print('No sense')
         except:
             #assistent.speak("I didn't catch that. What did you say?")
             pass

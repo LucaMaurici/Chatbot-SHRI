@@ -107,7 +107,7 @@ class Laurel():
 
     def checkStop(self, guess):
         words = self.parser.words(guess)
-        candidates = ['stop', 'shut', 'silent', 'quit', 'cancel', 'enough', 'exit']
+        candidates = ['stop', 'shut', 'silent', 'quit', 'cancel', 'enough', 'exit', 'exeter']
         return self.parser.shareWords(words, candidates)
 
     def evaluation(self, sentence):
@@ -228,8 +228,8 @@ class Laurel():
         return squareMeters
 
     def isCorrect(self, sentence):
-        yes1 = ['yeah', 'yes', 'correct', 'positive', 'right', 'ok', 'okay']
-        no1 = ['no', 'nope', 'not' 'negative', 'wrong', "neither"]
+        yes1 = ['yeah', 'yes', 'correct', 'positive', 'right', 'ok', 'okay', 'proceed']
+        no1 = ['no', 'nope', 'not' 'negative', 'wrong', 'neither', 'mistake']
         yes2 = ['it is']
         no2 = ["it isn't", "not correct", "no correct", "not right", "not ok", "not okay"]
         words = self.parser.words(sentence)
@@ -656,10 +656,10 @@ class Laurel():
                         answer = "I'm sorry but we don't have houses in line with your budget. Come back later, you may be lucky"
                     elif numHouses == 1:
                         answer = "We have an house which costs "+str(int(round(budget*1.1)))+" Euros, which is a little bit more than your budget."+\
-                                    "If you are interested anyway, when you want, you can schedule an appointment with an our agent."
+                                    "If you are still interested, when you want you can schedule an appointment with an our agent."
                     elif numHouses == 2:
                         answer = "We have two houses which cost "+str(int(round(budget*0.85)))+" Euros and "+str(int(round(budget*1.1)))+" Euros which is around your budget."+\
-                                    "If you are interested, when you want, you can schedule an appointment with an our agent."
+                                    "If you are interested, when you want you can schedule an appointment with an our agent."
                     self.speak(answer)
                 else:
                     guess = None

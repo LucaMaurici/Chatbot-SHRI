@@ -1,15 +1,15 @@
 {"intents": [
     {"tag": "greeting",
-     "patterns": ["Hi", "Hey", "Is anyone there?", "Hello", "Hay", "good morning"]
+     "patterns": ["hi", "hey", "is anyone there?", "hello", "hay", "good morning"]
     },
     {"tag": "goodbye",
-     "patterns": ["Bye", "See you later", "Goodbye", "bye bye", "see you"]
+     "patterns": ["bye", "see you later", "goodbye", "bye bye", "see you"]
     },
     {"tag": "thanks",
-     "patterns": ["Thanks", "Thank you", "That's helpful", "Thanks for the help", "thanks", "thank you", "thank you very much"]
+     "patterns": ["thanks", "thank you", "that's helpful", "thanks for the help", "thanks", "thank you", "thank you very much"]
     },
     {"tag": "help",
-    "patterns": ["Could you help me?", "give me a hand please", "Can you help?", "What can you do for me?", "i need a support", "i need a help", "support me please"]
+    "patterns": ["could you help me", "give me a hand please", "can you help", "what can you do for me", "i need a support", "i need a help", "support me please"]
     },
 
     {"tag": "evaluation",
@@ -18,20 +18,20 @@
 	 "i would like to know a good price for a property","i would like to know a good price for my estate", "i want to evaluate my propery", 
 	 "can you estimate the price of my estate", "can you evaluate my estate", "i would like to know a good price for my house", 
 	 "can you evaluate my house", "i would like to evaluate my house", "is there someone who can evaluate a property", "can you tell me the right price for a property",
-	 "i would need an estimate", "I would like to evaluate"]
+	 "i would need an estimate", "i would like to evaluate", "i have a property that i want to sell can you evaluate it"]
 	},
 	{"tag": "apartmentEvaluation",
 	"patterns": ["could you make a real estate estiamate for my apartment", "i would like to sell my apartment", 
 	 "i would like to know a good price for my apartment", "i would like to evaluate my attic", "i need an apartment evaluation", "loft",
 	 "i would like to evaluate my basement", "can you evaluate my loft", "i need to estimate the price of my penthouse", "i would like to evaluate my apartment",
 	 "i would like to evaluate my flat", "can you tell me the right price for an apartment", "i would need an estimate for my flat",
-	 "i would need an evaluation for my flat"]
+	 "i would need an evaluation for my flat", "i have an apartment that i want to sell can you evaluate it"]
 	},
 	{"tag": "villaEvaluation",
 	"patterns": ["i would like to know a good price for my villa", "could you make a real estate estiamate for my villa", "i would like to sell my villa", 
 	 "i would like to know a good price for my villa", "i would like to evaluate my attic", "i need an villa evaluation", "villa",
 	 "i would like to evaluate my villa", "can you evaluate my villa", "i need to estimate the price of my mansion", "can you tell me the right price for a villa",
-	 "i would need an estimate for my villa", "i would need an evaluation for my house with garden"]
+	 "i would need an estimate for my villa", "i would need an evaluation for my house with garden", "i have a villa that i want to sell can you evaluate it"]
 	},
 	{
 	"tag": "housesAvailability",
@@ -40,7 +40,7 @@
 				 "i would like to buy a propery", "i want to invest money in a property", "i want to invest money in real estate", "are there interesting offers",
 				 "are there interesting offers in this period", "can you give me some information about the current real estate market", "i want to buy an house",
 				 " i want to by a villa", "i would like to buy", "i would like to make an investment", "i would like to buy a villa", "what offers the market", 
-				 "what is offering the market", "are there some houses to show me"]
+				 "what is offering the market", "are there some houses to show me", "investiment", "real estate investiment", "i want to invest my money in real estate"]
 	},
 	{"tag" : "appointment",
 	"patterns": ["i would like to take an appointment", "i would like to schedule an appointment", "i want to schedule an appointment", 
