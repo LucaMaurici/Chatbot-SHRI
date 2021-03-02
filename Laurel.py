@@ -126,15 +126,15 @@ class Laurel():
                 #print(self.parser.words(guess))
                 words = self.parser.words(guess)
                 candidates = ['apartment', 'villa', 'flat', 'basement', 'attic', 'garden', 'gardens',\
-                                'apartments', 'villas', 'flats', 'palaces', 'basements',\
-                                'attics', 'loft', 'lofts', 'penthouse', 'penthouses', 'arctic', 'synoptic', 'haptic', 'optic', 'neurotic', 'somatic', 'synaptic']
+                                'apartments', 'villas', 'flats', 'palaces', 'basements'\
+                                'attics', 'loft', 'lofts', 'penthouse', 'penthouses', 'arctic', 'synoptic', 'haptic', 'optic', 'neurotic', 'somatic', 'synaptic', 'article']
                 commonWords = self.parser.commonWords(candidates, words)
                 if len(commonWords)>=2:
                     self.speak("Please, specify one type only")
                     guess = None
                     continue
                 elif self.parser.shareWords(commonWords, ['apartment', 'apartments', 'basement', 'attic', 'basements','attics', 'loft', 'lofts',\
-                                                             'penthouse', 'penthouses', 'arctic', 'synoptic', 'haptic', 'optic', 'neurotic', 'somatic',\
+                                                             'penthouse', 'penthouses', 'arctic', 'synoptic', 'haptic', 'optic', 'neurotic', 'somatic', 'article',\
                                                              'flat', 'flats', 'synaptic']):
                     return self.apartmentEvaluation(sentence)
                 elif self.parser.shareWords(commonWords, ['villa', 'villas', 'garden', 'gardens']):
@@ -300,7 +300,7 @@ class Laurel():
                 guess = guess.lower()
                 if self.checkStop(guess): return True
                 words = self.parser.words(guess)
-                attic = ['attic', 'last', 'penthouse', 'loft', 'arctic', 'synoptic', 'haptic', 'optic', 'neurotic', 'somatic', 'synaptic']
+                attic = ['attic', 'last', 'penthouse', 'loft', 'arctic', 'synoptic', 'haptic', 'optic', 'neurotic', 'somatic', 'synaptic', 'article']
                 basement = ['basement', 'minus', 'garage', 'underground']
                 cwAttic = len(self.parser.commonWords(attic, words))
                 cwBasement = len(self.parser.commonWords(basement, words))
@@ -425,9 +425,9 @@ class Laurel():
 
                     evaluation += (nBathrooms-1)*30000
 
-                    evaluation = round(evaluation, -3)
+                    evaluation = int(round(evaluation, -3))
                     sentenceToTell = "Very good, my personal evaluation for your apartment is around "+str(evaluation)+\
-                                    " Euros, we could publish an announcement asking "+str(round(evaluation*1.15, -2))+\
+                                    " Euros, we could publish an announcement asking "+str(int(round(evaluation*1.15, -3)))+\
                                     " Euros that is 15 percent higher than his real value. If you want we can publish an announcement, do you agree?"
                     self.speak(sentenceToTell)
                     guess = None
@@ -446,7 +446,7 @@ class Laurel():
                                 self.speak("If I can do something else for you, just ask me.")
                             else:
                                 self.speak("Ok, no problem, when you want you can call us.")
-                                self.speak("If I can do someting else for you, just ask me.")
+                                self.speak("If I can do something else for you, just ask me.")
                         except:
                             guess = None
                 else:
@@ -464,7 +464,7 @@ class Laurel():
                             positionCand = ['position', 'place', 'where', 'site', 'zone' 'location', 'center', 'central', 'peripheral',\
                                          'suburbs', 'suburbs', 'periphery', 'outskirts', 'semi-suburbs', 'semi-suburbs']
                             floorCand = ['attic', 'last', 'basement', 'minus', 'garage', 'ground', 'underground', 'penthouse', 'loft',\
-                                         'arctic', 'synoptic', 'haptic', 'optic', 'neurotic', 'somatic', 'synaptic']
+                                         'arctic', 'synoptic', 'haptic', 'optic', 'neurotic', 'somatic', 'synaptic', 'article']
                             nBathroomsCand = ['bathrooms', 'restroom', 'bath', 'bathroom', 'restrooms', 'room', 'rooms', 'paths']
                             cwSquareMeters = len(self.parser.commonWords(squareMetersCand, words))
                             cwPosition = len(self.parser.commonWords(positionCand, words))
@@ -551,9 +551,9 @@ class Laurel():
 
                     evaluation += (nBathrooms-1)*30000
 
-                    evaluation = round(evaluation, -3)
+                    evaluation = int(round(evaluation, -3))
                     sentenceToTell = "Very good, my personal evaluation for your villa is around "+str(evaluation)+\
-                                    " Euros, we could publish an announcement asking "+str(round(evaluation*1.15, -2))+\
+                                    " Euros, we could publish an announcement asking "+str(int(round(evaluation*1.15, -3)))+\
                                     " Euros that is 15 percent higher than his real value. If you want we can publish an announcement, do you agree?"
                     self.speak(sentenceToTell)
                     guess = None
@@ -572,7 +572,7 @@ class Laurel():
                                 self.speak("If I can do something else for you, just ask me.")
                             else:
                                 self.speak("Ok, no problem, when you want you can call us.")
-                                self.speak("If I can do someting else for you, just ask me.")
+                                self.speak("If I can do something else for you, just ask me.")
                         except:
                             guess = None
                 else:
